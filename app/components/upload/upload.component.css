@@ -1,0 +1,24 @@
+.btn-group-vertical .icon {
+    padding: 6px 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+    text-align: center;
+    color: white;
+    cursor:-webkit-grab;
+}
+
+.icon-success{
+    background-color: #70ad68;                
+}
+
+.icon-warning{
+    background-color: #ed9e44;
+}
+
+.non-draggable{
+    cursor: default !important;
+}
+.columns-container{
+    background-color: #efffe8;
+}

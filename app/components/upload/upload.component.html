@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            Selected CSV file:
+        </div>
+        <div class="col-md-4" *ngFor="let item of uploader.queue">
+            <strong>{{ item?.file?.name }}</strong>
+        </div>
+        <div class="clearfix"></div>
+        <div class="checkbox col-md-4">
+            <label><input type="checkbox" value="" [(ngModel)]="isCsvHasHeader">Csv has header?</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader"
+                class="well my-drop-zone">
+                Drop File Here
+                <input id="singleUploader" type="file" #fileInput ng2FileSelect [uploader]="uploader" style="display: block" />
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="uploadedCsvColumns">
+        <div class=" col-md-6 columns-container">
+            <div class="col-md-5 btn-group-vertical">
+                <div class="icon icon-warning non-draggable" *ngFor="let item of mappableColumns">
+                    <span style="margin-left:3px; margin-right:5px;">{{item}}</span>
+                </div>
+            </div>
+            <div class="col-md-5 btn-group-vertical" [dragula]='"upload-result"' [dragulaModel]="uploadedCsvColumns">
+                <div class="icon icon-success" *ngFor="let item of uploadedCsvColumns">
+                    <span class="pull-right" style="cursor:pointer;" (click)="onCloseClick(item)">x</span>
+                    <span style="margin-left:3px; margin-right:5px;">{{item}}</span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <span class="glyphicon glyphicon-plus" (click)="addBlank()"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row" *ngIf="uploadedCsvColumns">
+        <div class="col-md-6">
+            <div class="btn btn-success pull-right" (click)="createTableBasedOnMapping()">Next ></div>
+        </div>
+    </div>
+</div>

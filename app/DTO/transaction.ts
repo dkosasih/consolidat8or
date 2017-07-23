@@ -1,32 +1,32 @@
-import { User } from './user'
-import { TransactionAccount } from './transactionAccount'
-import { Tag } from './tag'
-import { TransactionType } from './transactionType'
+import { IUser } from './user'
+import { ITransactionAccount } from './transactionAccount'
+import { ITag } from './tag'
+import { ITransactionType } from './transactionType'
 
 export interface ITransaction{
     Id: number;
-    EnteredDate: Date;
-    EnteredBy: User;
-    TransactionDate: Date;
-    TransactionDateOverride: Date;
-    TransactionType: TransactionType;
-    AccountReference: TransactionAccount;
-    AccountAffected: TransactionAccount;
-    Tag: Tag;
+    EnteredDate: string;
+    EnteredBy: IUser;
+    TransactionDate: string;
+    TransactionDateOverride: string;
+    TransactionType: ITransactionType;
+    AccountReference: ITransactionAccount;
+    AccountAffected: ITransactionAccount;
+    Tag: ITag;
     Description: string;
     Value: PaymentCurrencyAmount;
 }
 
-export class Transaction {
+export class Transaction implements ITransaction {
     Id: number = undefined;
-    EnteredDate: Date = undefined;
-    EnteredBy: User = undefined;
-    TransactionDate: Date = undefined;
-    TransactionDateOverride: Date = undefined;
-    TransactionType: TransactionType = undefined;
-    AccountReference: TransactionAccount = undefined;
-    AccountAffected: TransactionAccount = undefined;
-    Tag: Tag = undefined;
+    EnteredDate: string = undefined;
+    EnteredBy: IUser = undefined;
+    TransactionDate: string = undefined;
+    TransactionDateOverride: string = undefined;
+    TransactionType: ITransactionType = undefined;
+    AccountReference: ITransactionAccount = undefined;
+    AccountAffected: ITransactionAccount = undefined;
+    Tag: ITag = undefined;
     Description: string = undefined;
     Value: PaymentCurrencyAmount = undefined;
 

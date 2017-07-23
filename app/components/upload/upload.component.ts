@@ -6,15 +6,13 @@ import { Transaction } from '../../DTO/transaction';
 import { MappedColumnsService } from '../../services/mappedColumns.service';
 import { Router } from '@angular/router';
 
+import './upload.component.less'
+
 @Component({
     selector: 'upload-csv',
     templateUrl: 'app/components/upload/upload.component.html',
-    styles: [`
-            
-            `],
     styleUrls: ['app/styles/fileUpload.css',
-        'node_modules/dragula/dist/dragula.min.css',
-        'app/components/upload/upload.component.css'],
+        'node_modules/dragula/dist/dragula.min.css'],
     providers: [CsvReader]
 })
 export class UploadComponent implements OnInit {
@@ -59,14 +57,13 @@ export class UploadComponent implements OnInit {
         this.uploadedCsvColumns.push("Empty_" + (Math.floor(Math.random() * 100) + 1).toString());
     }
 
-    public onCloseClick(item: any) {
+    public onRemoveClick(item: any) {
         this.uploadedCsvColumns = this.uploadedCsvColumns.filter(f => { return f != item; });
-        console.log(this.uploadedCsvColumns);
     }
 
     public createTableBasedOnMapping() {
         this.mappedColumns.setMappedColumns(this.uploadedCsvColumns);
-        this.router.navigateByUrl('/tablepreview')
+        this.router.navigateByUrl('/tablepreview');
     }
 
     ngOnInit() {
@@ -97,7 +94,7 @@ export class UploadComponent implements OnInit {
                     }
                 }
 
-                this.mappedColumns.setMappedColumns(this.uploadedCsvColumns);
+                this.mappedColumns.setUploadedResult(jsonObject);
             });
         };
 

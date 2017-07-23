@@ -1,4 +1,4 @@
-export class TransactionAccount{
+export interface ITransactionAccount{
     Id: number;
     Code: string;
     Name: string;

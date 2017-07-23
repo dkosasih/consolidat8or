@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-5 btn-group-vertical" [dragula]='"upload-result"' [dragulaModel]="uploadedCsvColumns">
                 <div class="icon icon-success" *ngFor="let item of uploadedCsvColumns">
-                    <span class="pull-right" style="cursor:pointer;" (click)="onCloseClick(item)">x</span>
+                    <span class="pull-right" style="cursor:pointer;" (click)="onRemoveClick(item)">x</span>
                     <span style="margin-left:3px; margin-right:5px;">{{item}}</span>
                 </div>
             </div>

@@ -93,7 +93,6 @@ export class UploadComponent implements OnInit {
                         this.uploadedCsvColumns.push("Empty_" + i);
                     }
                 }
-
                 this.mappedColumns.setUploadedResult(jsonObject);
             });
         };

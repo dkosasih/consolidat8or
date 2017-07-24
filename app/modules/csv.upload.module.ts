@@ -9,6 +9,7 @@ import { DragulaModule } from 'ng2-dragula';
 
 import { UploadComponent } from '../components/upload/upload.component'
 import { PreviewComponent } from '../components/preview/preview.component'
+import { TableRenderComponent } from '../components/tablerender/table.render.component'
 
 import { MappedColumnsService } from '../services/mappedColumns.service'
 
@@ -27,11 +28,12 @@ const routes: Routes = [
         DragulaModule,
         RouterModule.forChild(routes)
     ],
-    
+
     providers: [MappedColumnsService],
     declarations: [
         UploadComponent,
-        PreviewComponent
+        PreviewComponent,
+        TableRenderComponent
     ]
 
 })

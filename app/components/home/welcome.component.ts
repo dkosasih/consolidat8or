@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     templateUrl: 'app/components/home/welcome.component.html'
 })
-export class WelcomeComponent {
+export class WelcomeComponent implements OnInit {
     public pageTitle: string = '';
+
+    ngOnInit() {
+        console.log("mimin");
+    }
 }

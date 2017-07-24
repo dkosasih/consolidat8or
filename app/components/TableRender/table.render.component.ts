@@ -9,10 +9,8 @@ import { ITransactionType } from '../../DTO/transactionType'
 
 @Component({
     selector: 'table-render',
-    templateUrl: 'app/components/preview/preview.component.html'
+    templateUrl: 'app/components/TableRender/table.render.component.html'
 })
 export class TableRenderComponent{
-    @Input() transactions: Array<Transaction> = [];
-
-
+    @Input() transactions: Array<Transaction>;
 }

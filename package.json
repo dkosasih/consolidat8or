@@ -5,7 +5,7 @@
   "description": "Bulk upsert to Google database for daily expenses",
   "scripts": {
     "build": "webpack",
-    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
+    "start": "webpack-dev-server --port 3000 --watch-poll --hot --inline --progress --colors",
     "lint": "tslint ./app/**/*.ts -t verbose",
     "typings": "typings",
     "postinstall": "typings install"

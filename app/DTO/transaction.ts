@@ -3,12 +3,12 @@ import { ITransactionAccount } from './transactionAccount'
 import { ITag } from './tag'
 import { ITransactionType } from './transactionType'
 
-export interface ITransaction{
+export interface ITransaction {
     Id: number;
-    EnteredDate: string;
+    EnteredDate: Date;
     EnteredBy: IUser;
-    TransactionDate: string;
-    TransactionDateOverride: string;
+    TransactionDate: Date;
+    TransactionDateOverride: Date;
     TransactionType: ITransactionType;
     AccountReference: ITransactionAccount;
     AccountAffected: ITransactionAccount;
@@ -19,10 +19,10 @@ export interface ITransaction{
 
 export class Transaction implements ITransaction {
     Id: number = undefined;
-    EnteredDate: string = undefined;
+    EnteredDate: Date = undefined;
     EnteredBy: IUser = undefined;
-    TransactionDate: string = undefined;
-    TransactionDateOverride: string = undefined;
+    TransactionDate: Date = undefined;
+    TransactionDateOverride: Date = undefined;
     TransactionType: ITransactionType = undefined;
     AccountReference: ITransactionAccount = undefined;
     AccountAffected: ITransactionAccount = undefined;

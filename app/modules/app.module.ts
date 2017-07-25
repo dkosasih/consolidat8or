@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpModule, JsonpModule } from '@angular/http';
-import {UploadModule} from './csv.upload.module'
+import {UploadModule} from './csv.upload.module';
+
+import {CommonModule} from './common.module';
 
 import { AppComponent } from '../app.component';
-import { WelcomeComponent } from '../components/home/welcome.component'
+import { WelcomeComponent } from '../components/home/welcome.component';
 
 const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
@@ -15,9 +14,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [BrowserModule,
-    JsonpModule,
-    FormsModule,
+  imports: [
+    CommonModule,
     RouterModule.forRoot(routes, {useHash:true}),
     UploadModule
   ],

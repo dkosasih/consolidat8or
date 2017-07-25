@@ -6,6 +6,7 @@ import { IUser } from '../../DTO/user'
 import { ITransactionAccount } from '../../DTO/transactionAccount'
 import { ITag } from '../../DTO/tag'
 import { ITransactionType } from '../../DTO/transactionType'
+import { List } from '../../helper/collection'
 
 import { MappedColumnsService } from '../../services/mappedColumns.service';
 
@@ -19,56 +20,52 @@ export class PreviewComponent implements OnInit {
         public mappedColumns: MappedColumnsService) {
     }
 
-    public transactions: Array<Transaction> = [];
+    public transactions: List<Transaction> = new List<Transaction>();
 
     private getMappedColumnByMappableColumnName(columnName: string): string {
         return this.mappedColumns.getMappedColumns()[new Transaction().getMappableColumns().indexOf(columnName)]
     }
 
+    private allEmptyOrNull(object: any) {
+        for (var i in object) {
+            if (!object[i] || object[i] !== null || object[i] !== "") return false;
+        }
+        return true;
+    }
+
+    private jsonToTransaction(json: any, index: number): Transaction {
+        let transaction = new Transaction();
+
+        transaction.Id = index;
+        transaction.EnteredDate = new Date();
+        transaction.EnteredBy = { Id: 1, username: "dkosasih" };
+
+        transaction.TransactionDate = json[this.getMappedColumnByMappableColumnName("TransactionDate")];
+
+        for (let columnName in transaction.getMappableColumns()) {
+            if (this.mappedColumns.getMappedColumns()[columnName].indexOf("Empty") === -1) {
+                transaction[columnName] = {
+                    Id: index,
+                    Name: json[this.mappedColumns.getMappedColumns()[columnName]],
+                    Code: json[this.mappedColumns.getMappedColumns()[columnName]]
+                };
+            }
+        }
+
+        return transaction;
+    }
+
     ngOnInit() {
-        console.log("ll", this.mappedColumns.getUploadedResult());
-        console.log("hh", this.mappedColumns.getUploadedResult());
-        console.log("nn", this.mappedColumns.getMappedColumns());
-        console.log("ii", this.mappedColumns.getMappedColumns());
         if (!this.mappedColumns.getMappedColumns() || !this.mappedColumns.getUploadedResult()) {
             this.router.navigateByUrl("/welcome");
         }
 
         if (this.mappedColumns.getMappedColumns() && this.mappedColumns.getUploadedResult()) {
+            console.log(this.mappedColumns.getUploadedResult());
             this.mappedColumns.getUploadedResult().forEach((item: any, index: number) => {
-                let transaction = new Transaction();
-
-                transaction.Id = 1;
-                transaction.EnteredDate = new Date().toDateString();
-                transaction.EnteredBy = { Id: 1, username: "dkosasih" };
-
-                transaction.TransactionDate = item[this.getMappedColumnByMappableColumnName("TransactionDate")];
-
-                if (this.getMappedColumnByMappableColumnName("TransactionType").indexOf("Empty") === -1) {
-                    transaction.TransactionType = {
-                        Id: index,
-                        Name: item[this.getMappedColumnByMappableColumnName("TransactionType")],
-                        Code: item[this.getMappedColumnByMappableColumnName("TransactionType")]
-                    };
+                if (!this.allEmptyOrNull(item)) {
+                    this.transactions.add(this.jsonToTransaction(item, index));
                 }
-
-                if (this.getMappedColumnByMappableColumnName("Tag").indexOf("Empty") === -1) {
-                    transaction.Tag = {
-                        Id: index,
-                        Name: item[this.getMappedColumnByMappableColumnName("Tag")],
-                        Code: item[this.getMappedColumnByMappableColumnName("Tag")]
-                    };
-                }
-
-                if (this.getMappedColumnByMappableColumnName("Description").indexOf("Empty") === -1) {
-                    transaction.Description = this.getMappedColumnByMappableColumnName("Description")
-                }
-
-                if (this.getMappedColumnByMappableColumnName("Value").indexOf("Empty") === -1) {
-                    transaction.Value = { value: this.getMappedColumnByMappableColumnName("Value") };
-                }
-
-                this.transactions.push(transaction);
             });
         }
     }

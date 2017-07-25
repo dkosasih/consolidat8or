@@ -1,6 +1,18 @@
 <div class="container" *ngIf="transactions">
-    <div class="col-md-12" *ngFor="let item of transactions">
-        test
-
+    <div class="row">
+        <div class="col-md-3">
+            <span><strong>Id</strong></span>
+        </div>
+        <div class="col-md-3">
+            <span><strong>Transaction Date</strong></span>
+        </div>
+    </div>
+    <div class="row" *ngFor="let item of transactions.items()">
+        <div class="col-md-3">
+            <span>{{item.Id}}</span>
+        </div>
+        <div class="col-md-3">
+            <span>{{item.TransactionDate| date:"dd/MM/yy"}}</span>
+        </div>
     </div>
 </div>

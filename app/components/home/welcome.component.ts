@@ -7,6 +7,5 @@ export class WelcomeComponent implements OnInit {
     public pageTitle: string = '';
 
     ngOnInit() {
-        console.log("mimin");
     }
 }

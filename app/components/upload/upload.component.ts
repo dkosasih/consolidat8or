@@ -23,12 +23,13 @@ export class UploadComponent implements OnInit {
     uploadedCsvColumns: Array<string>;
     isCsvHasHeader: boolean;
     mappableColumns: Array<string>;
+    file: File;
 
     constructor(
-        public router: Router,
-        public dragulaService: DragulaService,
-        public csvReader: CsvReader,
-        public mappedColumns: MappedColumnsService) {
+        private router: Router,
+        private dragulaService: DragulaService,
+        private csvReader: CsvReader,
+        private mappedColumns: MappedColumnsService) {
         dragulaService.dropModel.subscribe((value: any) => {
             this.onDropModel(value.slice(1));
         });
@@ -49,16 +50,42 @@ export class UploadComponent implements OnInit {
         (<HTMLInputElement>document.getElementById("singleUploader")).value = null;
     }
 
-    public fileOverBase(e: any): void {
-        this.hasBaseDropZoneOver = e;
-    }
-
     private addBlank() {
         this.uploadedCsvColumns.push("Empty_" + (Math.floor(Math.random() * 100) + 1).toString());
     }
 
+    private bindDataFromFile(data: File, hasHeader: boolean) {
+        this.csvReader.readCsvData(data, hasHeader, (result) => {
+            this.uploadedCsvColumns = [];
+            let jsonObject = result;
+
+            for (let key in jsonObject[0]) {
+                this.uploadedCsvColumns.push(key);
+            }
+
+            if (this.mappableColumns.length > this.uploadedCsvColumns.length) {
+                for (let i = 0; i <= (this.mappableColumns.length - this.uploadedCsvColumns.length); i++) {
+                    this.uploadedCsvColumns.push("Empty_" + i);
+                }
+            }
+
+            this.file = data;
+            this.mappedColumns.setUploadedResult(jsonObject);
+        });
+    }
+
+    public fileOverBase(e: any): void {
+        this.hasBaseDropZoneOver = e;
+    }
+
     public onRemoveClick(item: any) {
         this.uploadedCsvColumns = this.uploadedCsvColumns.filter(f => { return f != item; });
+    }
+
+    public rebindColumn() {
+        if (this.file) {
+            this.bindDataFromFile(this.file, !this.isCsvHasHeader);
+        }
     }
 
     public createTableBasedOnMapping() {
@@ -80,21 +107,8 @@ export class UploadComponent implements OnInit {
             }
             this.cleanFileName();
 
-            this.csvReader.readCsvData(f._file, this.isCsvHasHeader, (result) => {
-                this.uploadedCsvColumns = [];
-                let jsonObject = result;
-
-                for (let key in jsonObject[0]) {
-                    this.uploadedCsvColumns.push(key);
-                }
-
-                if (this.mappableColumns.length > this.uploadedCsvColumns.length) {
-                    for (let i = 0; i <= (this.mappableColumns.length - this.uploadedCsvColumns.length); i++) {
-                        this.uploadedCsvColumns.push("Empty_" + i);
-                    }
-                }
-                this.mappedColumns.setUploadedResult(jsonObject);
-            });
+this.bindDataFromFile(f._file, this.isCsvHasHeader);
+          
         };
 
         this.uploader.onWhenAddingFileFailed = function (item, filter, options) {

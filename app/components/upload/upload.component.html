@@ -8,7 +8,7 @@
         </div>
         <div class="clearfix"></div>
         <div class="checkbox col-md-4">
-            <label><input type="checkbox" value="" [(ngModel)]="isCsvHasHeader">Csv has header?</label>
+            <label><input type="checkbox" value="" [(ngModel)]="isCsvHasHeader" (click)="rebindColumn()">Csv has header?</label>
         </div>
     </div>
     <div class="row">
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <span class="glyphicon glyphicon-plus" (click)="addBlank()"></span>
+                <button type="button" class="btn btn-info" (click)="addBlank()">+</button>
             </div>
         </div>
     </div>

@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
+import {Observable} from 'rxjs/Rx';
+import 'rxjs/add/operator/pluck';
+
 import { Transaction } from '../../DTO/transaction';
 import { IUser } from '../../DTO/user'
 import { ITransactionAccount } from '../../DTO/transactionAccount'
@@ -16,8 +19,8 @@ import { MappedColumnsService } from '../../services/mappedColumns.service';
 })
 export class PreviewComponent implements OnInit {
     constructor(
-        public router: Router,
-        public mappedColumns: MappedColumnsService) {
+        private router: Router,
+        private mappedColumns: MappedColumnsService) {
     }
 
     public transactions: List<Transaction> = new List<Transaction>();
@@ -28,7 +31,9 @@ export class PreviewComponent implements OnInit {
 
     private allEmptyOrNull(object: any) {
         for (var i in object) {
-            if (!object[i] || object[i] !== null || object[i] !== "") return false;
+            if (object[i] && object[i] !== null && object[i] !== "\r" && object[i] !== "") {
+                return false;
+            }
         }
         return true;
     }
@@ -58,15 +63,14 @@ export class PreviewComponent implements OnInit {
     ngOnInit() {
         if (!this.mappedColumns.getMappedColumns() || !this.mappedColumns.getUploadedResult()) {
             this.router.navigateByUrl("/welcome");
-        }
-
-        if (this.mappedColumns.getMappedColumns() && this.mappedColumns.getUploadedResult()) {
-            console.log(this.mappedColumns.getUploadedResult());
+        } else {
             this.mappedColumns.getUploadedResult().forEach((item: any, index: number) => {
                 if (!this.allEmptyOrNull(item)) {
                     this.transactions.add(this.jsonToTransaction(item, index));
                 }
             });
         }
+
+       // Observable.from(this.transactions.items()).pluck('TransactionDate').subscribe(bla=>{console.log(bla);});
     }
 }

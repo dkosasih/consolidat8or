@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+    devtool: 'eval-source-map',
     entry: {
         'app': './app/main.ts'
     },
@@ -11,12 +12,18 @@ module.exports = {
         publicPath: path.join(__dirname, 'dist')
     },
     resolve: {
-        extensions: [".js", ".ts"]
+        extensions: [".ts", ".js"]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     ],
+    devServer: {
+        inline: true,
+        historyApiFallback: true,
+        stats: 'minimal',
+        port: 3000
+    },
     module: {
         loaders: [
             {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/pluck';
 
 import { Transaction } from '../../DTO/transaction';
@@ -38,39 +38,38 @@ export class PreviewComponent implements OnInit {
         return true;
     }
 
-    private jsonToTransaction(json: any, index: number): Transaction {
-        let transaction = new Transaction();
+    private jsonToTransaction(transactions: any, json: any, index: number) {
+        if (!this.allEmptyOrNull(json)) {
+            let transaction = new Transaction();
 
-        transaction.Id = index;
-        transaction.EnteredDate = new Date();
-        transaction.EnteredBy = { Id: 1, username: "dkosasih" };
+            transaction.Id = index;
+            transaction.EnteredDate = new Date();
+            transaction.EnteredBy = { Id: 1, username: "dkosasih" };
 
-        transaction.TransactionDate = json[this.getMappedColumnByMappableColumnName("TransactionDate")];
+            transaction.TransactionDate = json[this.getMappedColumnByMappableColumnName("TransactionDate")];
 
-        for (let columnName in transaction.getMappableColumns()) {
-            if (this.mappedColumns.getMappedColumns()[columnName].indexOf("Empty") === -1) {
-                transaction[columnName] = {
-                    Id: index,
-                    Name: json[this.mappedColumns.getMappedColumns()[columnName]],
-                    Code: json[this.mappedColumns.getMappedColumns()[columnName]]
-                };
+            for (let columnName in transaction.getMappableColumns()) {
+                if (this.mappedColumns.getMappedColumns()[columnName].indexOf("Empty") === -1) {
+                    transaction[columnName] = {
+                        Id: index,
+                        Name: json[this.mappedColumns.getMappedColumns()[columnName]],
+                        Code: json[this.mappedColumns.getMappedColumns()[columnName]]
+                    };
+                }
             }
-        }
 
-        return transaction;
+            transactions.add(transaction);
+        }
+         return transactions;
     }
 
     ngOnInit() {
         if (!this.mappedColumns.getMappedColumns() || !this.mappedColumns.getUploadedResult()) {
             this.router.navigateByUrl("/welcome");
         } else {
-            this.mappedColumns.getUploadedResult().forEach((item: any, index: number) => {
-                if (!this.allEmptyOrNull(item)) {
-                    this.transactions.add(this.jsonToTransaction(item, index));
-                }
-            });
+             this.transactions = this.mappedColumns.getUploadedResult().reduce(this.jsonToTransaction.bind(this), new List<Transaction>());
         }
 
-       // Observable.from(this.transactions.items()).pluck('TransactionDate').subscribe(bla=>{console.log(bla);});
+        // Observable.from(this.transactions.items()).pluck('TransactionDate').subscribe(bla=>{console.log(bla);});
     }
 }

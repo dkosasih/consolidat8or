@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { HttpModule, JsonpModule } from '@angular/http';
+import { HttpModule } from '@angular/http';
+import { CommonModule } from './common.module';
+import { DatePipe } from '@angular/common';
 
 import { FileUploadModule } from 'ng2-file-upload';
 import { DragulaModule } from 'ng2-dragula';
+import { GenericTableModule } from '@angular-generic-table/core';
 
 import { UploadComponent } from '../components/upload/upload.component'
 import { PreviewComponent } from '../components/preview/preview.component'
@@ -21,19 +22,18 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        BrowserModule,
-        JsonpModule,
-        FormsModule,
+        CommonModule,
         FileUploadModule,
         DragulaModule,
+        GenericTableModule,
         RouterModule.forChild(routes)
     ],
 
-    providers: [MappedColumnsService],
+    providers: [MappedColumnsService, DatePipe],
     declarations: [
         UploadComponent,
         PreviewComponent,
-        TableRenderComponent
+        TableRenderComponent        
     ]
 
 })

@@ -70,6 +70,6 @@ export class PreviewComponent implements OnInit {
              this.transactions = this.mappedColumns.getUploadedResult().reduce(this.jsonToTransaction.bind(this), new List<Transaction>());
         }
 
-        // Observable.from(this.transactions.items()).pluck('TransactionDate').subscribe(bla=>{console.log(bla);});
+         //Observable.from<Array<Transaction>>(this.transactions.items()).pluck('TransactionDate').subscribe(bla=>{console.log(bla);});
     }
 }

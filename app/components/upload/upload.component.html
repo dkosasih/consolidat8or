@@ -20,6 +20,25 @@
             </div>
         </div>
     </div>
+    <div class="row col-md-6" *ngIf="mappedColumns.getUploadedResult()" style="background-color: #ededed; ">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <strong>Record Preview</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <generic-table #myTable [gtClasses]="'table-sm'" [gtSettings]="configObject.settings" [gtFields]="configObject.fields" [(gtData)]="configObject.data"
+                    [gtTexts]="{'tableInfo': 'Total of #recordsAfterSearch entries'}">
+                </generic-table>
+                <div class="text-center">
+                    <small><gt-table-info class="form-text text-muted mb-2" [genericTable]="myTable"></gt-table-info></small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">&nbsp;</div>
     <div class="row" *ngIf="uploadedCsvColumns">
         <div class=" col-md-6 columns-container">
             <div class="col-md-5 btn-group-vertical">
@@ -34,7 +53,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-info" (click)="addBlank()">+</button>
+                <button type="button" class="btn btn-success" (click)="addBlank()">+</button>
             </div>
         </div>
     </div>

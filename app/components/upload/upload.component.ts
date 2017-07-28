@@ -1,12 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { GtConfig } from '@angular-generic-table/core';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
 import { DragulaService } from 'ng2-dragula';
 import { CsvReader } from '../../helper/csv.reader';
 import { Transaction } from '../../DTO/transaction';
 import { MappedColumnsService } from '../../services/mappedColumns.service';
-import { Router } from '@angular/router';
 
 import './upload.component.less'
+
+export interface rowData {
+    id: number;
+    name: string;
+    date: Date;
+}
+
 
 @Component({
     selector: 'upload-csv',
@@ -24,18 +33,72 @@ export class UploadComponent implements OnInit {
     isCsvHasHeader: boolean;
     mappableColumns: Array<string>;
     file: File;
+    configObject: GtConfig<rowData>;
 
     constructor(
         private router: Router,
         private dragulaService: DragulaService,
         private csvReader: CsvReader,
-        private mappedColumns: MappedColumnsService) {
+        private datePipe: DatePipe,
+        public mappedColumns: MappedColumnsService) {
         dragulaService.dropModel.subscribe((value: any) => {
             this.onDropModel(value.slice(1));
         });
         dragulaService.removeModel.subscribe((value: any) => {
             this.onRemoveModel(value.slice(1));
         });
+
+        this.configObject = {
+            settings: [{
+                objectKey: 'id',
+                sort: 'asc',
+                sortOrder: 1,
+                columnOrder: 0
+            }, {
+                objectKey: 'name',
+                sort: 'asc',
+                sortOrder: 0,
+                columnOrder: 1
+            }, {
+                objectKey: 'date',
+                sort: 'enable',
+                columnOrder: 2,
+                visible: true
+            }],
+            fields: [{
+                name: 'Id',
+                objectKey: 'id'
+            }, {
+                name: 'Name',
+                objectKey: 'name'
+            }, {
+                name: 'date',
+                objectKey: 'date',
+                render: (so) => `${this.datePipe.transform(so.date, 'dd/MM/yyyy')}`,
+                stackedHeading: 'Custom heading'
+            }],
+            data: [{
+                'id': 1,
+                'name': 'Anna',
+                'date': new Date()
+            }, {
+                'id': 2,
+                'name': 'Julie',
+                'date': new Date()
+            }, {
+                'id': 3,
+                'name': 'Lillian',
+                'date': new Date()
+            }, {
+                'id': 4,
+                'name': 'Norma',
+                'date': new Date()
+            }, {
+                'id': 5,
+                'name': 'Ralph',
+                'date': new Date()
+            }]
+        };
     }
 
     private onDropModel(args: any) {
@@ -59,9 +122,11 @@ export class UploadComponent implements OnInit {
             this.uploadedCsvColumns = [];
             let jsonObject = result;
 
-            for (let key in jsonObject[0]) {
-                this.uploadedCsvColumns.push(key);
-            }
+
+            this.uploadedCsvColumns = Object.keys(jsonObject[0]).reduce((prev: any, curr: any) => {
+                prev.push(curr);
+                return prev;
+            }, []);
 
             if (this.mappableColumns.length > this.uploadedCsvColumns.length) {
                 for (let i = 0; i <= (this.mappableColumns.length - this.uploadedCsvColumns.length); i++) {
@@ -107,8 +172,8 @@ export class UploadComponent implements OnInit {
             }
             this.cleanFileName();
 
-this.bindDataFromFile(f._file, this.isCsvHasHeader);
-          
+            this.bindDataFromFile(f._file, this.isCsvHasHeader);
+
         };
 
         this.uploader.onWhenAddingFileFailed = function (item, filter, options) {

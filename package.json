@@ -2,7 +2,7 @@
   "name": "expenses-consolidator",
   "version": "1.0.0",
   "author": "Deddy Kosasih",
-  "description": "Bulk upsert to Google database for daily expenses",
+  "description": "Bulk upsert to Google Spreadsheet for daily expenses",
   "scripts": {
     "build": "webpack",
     "start": "tsc && concurrently \"webpack --watch\" \"tsc -w\" \"webpack-dev-server --watch-poll --colors\"",
@@ -12,6 +12,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@angular-generic-table/core": "^4.4.0",
     "@angular/common": "^4.0.0",
     "@angular/compiler": "^4.0.0",
     "@angular/core": "^4.0.0",

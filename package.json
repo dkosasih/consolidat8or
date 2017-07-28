@@ -34,7 +34,6 @@
     "css-loader": "^0.28.4",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "lite-server": "^2.2.0",
     "concurrently": "^2.2.0",
     "style-loader": "^0.18.2",
     "ts-loader": "^0.7.2",

@@ -1,21 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { GtConfig } from '@angular-generic-table/core';
+import { GtConfig } from 'angular-generic-table/@angular-generic-table/core';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
-import { DragulaService } from 'ng2-dragula';
+import { DragulaService } from 'ng2-dragula';   
 import { CsvReader } from '../../helper/csv.reader';
 import { Transaction } from '../../DTO/transaction';
 import { MappedColumnsService } from '../../services/mappedColumns.service';
 
 import './upload.component.less'
-
-export interface rowData {
-    id: number;
-    name: string;
-    date: Date;
-}
-
 
 @Component({
     selector: 'upload-csv',
@@ -33,7 +26,7 @@ export class UploadComponent implements OnInit {
     isCsvHasHeader: boolean;
     mappableColumns: Array<string>;
     file: File;
-    configObject: GtConfig<rowData>;
+    configObject: GtConfig<any> = { settings: [], fields: [], data: [] };
 
     constructor(
         private router: Router,
@@ -48,57 +41,57 @@ export class UploadComponent implements OnInit {
             this.onRemoveModel(value.slice(1));
         });
 
-        this.configObject = {
-            settings: [{
-                objectKey: 'id',
-                sort: 'asc',
-                sortOrder: 1,
-                columnOrder: 0
-            }, {
-                objectKey: 'name',
-                sort: 'asc',
-                sortOrder: 0,
-                columnOrder: 1
-            }, {
-                objectKey: 'date',
-                sort: 'enable',
-                columnOrder: 2,
-                visible: true
-            }],
-            fields: [{
-                name: 'Id',
-                objectKey: 'id'
-            }, {
-                name: 'Name',
-                objectKey: 'name'
-            }, {
-                name: 'date',
-                objectKey: 'date',
-                render: (so) => `${this.datePipe.transform(so.date, 'dd/MM/yyyy')}`,
-                stackedHeading: 'Custom heading'
-            }],
-            data: [{
-                'id': 1,
-                'name': 'Anna',
-                'date': new Date()
-            }, {
-                'id': 2,
-                'name': 'Julie',
-                'date': new Date()
-            }, {
-                'id': 3,
-                'name': 'Lillian',
-                'date': new Date()
-            }, {
-                'id': 4,
-                'name': 'Norma',
-                'date': new Date()
-            }, {
-                'id': 5,
-                'name': 'Ralph',
-                'date': new Date()
-            }]
-        };
+        // this.configObject = {
+        //     settings: [{
+        //         objectKey: 'id',
+        //         sort: 'asc',
+        //         sortOrder: 1,
+        //         columnOrder: 0
+        //     }, {
+        //         objectKey: 'name',
+        //         sort: 'asc',
+        //         sortOrder: 0,
+        //         columnOrder: 1
+        //     }, {
+        //         objectKey: 'date',
+        //         sort: 'enable',
+        //         columnOrder: 2,
+        //         visible: true
+        //     }],
+        //     fields: [{
+        //         name: 'Id',
+        //         objectKey: 'id'
+        //     }, {
+        //         name: 'Name',
+        //         objectKey: 'name'
+        //     }, {
+        //         name: 'date',
+        //         objectKey: 'date',
+        //         render: (so: any) => `${this.datePipe.transform(so.date, 'dd/MM/yyyy')}`,
+        //         stackedHeading: 'Custom heading'
+        //     }],
+        //     data: [{
+        //         'id': 1,
+        //         'name': 'Anna',
+        //         'date': new Date()
+        //     }, {
+        //         'id': 2,
+        //         'name': 'Julie',
+        //         'date': new Date()
+        //     }, {
+        //         'id': 3,
+        //         'name': 'Lillian',
+        //         'date': new Date()
+        //     }, {
+        //         'id': 4,
+        //         'name': 'Norma',
+        //         'date': new Date()
+        //     }, {
+        //         'id': 5,
+        //         'name': 'Ralph',
+        //         'date': new Date()
+        //     }]
+        // };
     }
 
     private onDropModel(args: any) {
@@ -117,13 +110,43 @@ export class UploadComponent implements OnInit {
         this.uploadedCsvColumns.push("Empty_" + (Math.floor(Math.random() * 100) + 1).toString());
     }
 
+    private setupPreviewTableData(json: any) {
+        //reset table field
+        let localConfigObject:GtConfig<any> = { settings: [], fields: [], data: [] };
+
+        Object.keys(json[0]).reduce((prev: any, curr: any, index: number) => {
+            prev.push(curr);
+
+            // setting setup
+            localConfigObject.settings.push({ objectKey: curr, columnOrder: index, sort: 'enable' });
+
+            // fields setup
+            localConfigObject.fields.push({
+                name: curr,
+                objectKey: curr
+            });
+
+            return prev;
+        }, []);
+
+        // Data Sample
+        for (let i = 0; i < (json.length < 4 ? json.length : 3); i++) {
+            let tempObject: any = {};
+            localConfigObject.settings.forEach((item: any) => {
+                tempObject[item.objectKey] = json[i][item.objectKey];
+            });
+            localConfigObject.data.push(tempObject);
+        }
+
+        this.configObject = localConfigObject;
+    }
+
     private bindDataFromFile(data: File, hasHeader: boolean) {
         this.csvReader.readCsvData(data, hasHeader, (result) => {
             this.uploadedCsvColumns = [];
             let jsonObject = result;
 
-
-            this.uploadedCsvColumns = Object.keys(jsonObject[0]).reduce((prev: any, curr: any) => {
+            this.uploadedCsvColumns = Object.keys(jsonObject[0]).reduce((prev: any, curr: any, index: number) => {
                 prev.push(curr);
                 return prev;
             }, []);
@@ -135,6 +158,7 @@ export class UploadComponent implements OnInit {
             }
 
             this.file = data;
+            this.setupPreviewTableData(jsonObject);
             this.mappedColumns.setUploadedResult(jsonObject);
         });
     }

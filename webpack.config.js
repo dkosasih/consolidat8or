@@ -28,6 +28,10 @@ module.exports = {
         loaders: [
             {
                 test: /\.ts/,
+                loaders: ['awesome-typescript-loader'], include: /node_modules\\angular-generic-table/
+            },
+            {
+                test: /\.ts/,
                 loaders: ['ts-loader'], exclude: /node_modules/
             },
             // LESS

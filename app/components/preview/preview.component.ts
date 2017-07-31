@@ -44,6 +44,7 @@ export class PreviewComponent implements OnInit {
 
             transaction.Id = index;
             transaction.EnteredDate = new Date();
+            // TODO: get the real logged in username 
             transaction.EnteredBy = { Id: 1, username: "dkosasih" };
 
             transaction.TransactionDate = json[this.getMappedColumnByMappableColumnName("TransactionDate")];

@@ -24,7 +24,7 @@ export class CsvReader {
 
             for (var j = 0; j < headers.length; j++) {
                 if (includeHeader) {
-                    if (headers[j] && headers[j] !== "") {
+                    if (headers[j] && headers[j] !== "" && headers[j] !== null && headers[j] !== "\r") {
                         obj[includeHeader ? headers[j] : defaultAlphabetMap[j]] = currentline[j];
                     }
                 } else {

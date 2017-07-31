@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 
 import { FileUploadModule } from 'ng2-file-upload';
 import { DragulaModule } from 'ng2-dragula';
-import { GenericTableModule } from '@angular-generic-table/core';
+import { GenericTableModule } from 'angular-generic-table/@angular-generic-table/core';
 
 import { UploadComponent } from '../components/upload/upload.component'
 import { PreviewComponent } from '../components/preview/preview.component'

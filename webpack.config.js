@@ -32,7 +32,7 @@ module.exports = {
             },
             {
                 test: /\.ts/,
-                loaders: ['ts-loader'], exclude: /node_modules/
+                loaders: ['awesome-typescript-loader'], exclude: /node_modules/
             },
             // LESS
             {

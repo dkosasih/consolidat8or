@@ -38,6 +38,20 @@ module.exports = {
             {
                 test: /\.less$/,
                 loader: 'style-loader!css-loader!less-loader'
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader"
+                }, {
+                    loader: "css-loader", options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: "sass-loader", options: {
+                        sourceMap: true
+                    }
+                }]
             }]
     }
 }

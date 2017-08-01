@@ -1,11 +1,13 @@
 .btn-group-vertical {
+    vertical-align: top;
     .icon {
         padding: 6px 12px;
         margin-top: 5px;
         margin-bottom: 5px;
-        vertical-align: middle;
+        vertical-align: top;
         text-align: center;
         color: white;
+        width:100%;
         cursor:-webkit-grab;
 
         &.icon-success {
@@ -18,10 +20,30 @@
     }
 }
 
+.at-the-bottom{
+    vertical-align: bottom;
+}
+
 .non-draggable{
     cursor: default !important;
 }
 
 .columns-container{
     background-color: #efffe8;
+}
+
+
+#GenericTableSet(){
+    generic-table {
+        td {
+            border-top: 2px solid #828282;
+        }
+        th {
+            border-top: 2px solid #828282;
+            border-bottom: 2px solid #828282;
+        }
+    }
+}
+&{
+    #GenericTableSet() !important;
 }

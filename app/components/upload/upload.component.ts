@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { GtConfig } from 'angular-generic-table/@angular-generic-table/core';
@@ -9,6 +9,7 @@ import { Transaction } from '../../DTO/transaction';
 import { MappedColumnsService } from '../../services/mappedColumns.service';
 
 import './upload.component.less'
+import '../../../node_modules/angular-generic-table/@angular-generic-table/core/generic-table.scss'
 
 @Component({
     selector: 'upload-csv',
@@ -20,6 +21,7 @@ import './upload.component.less'
 export class UploadComponent implements OnInit {
     private transaction: Transaction = new Transaction();
 
+     @ViewChild('myTable') genericTable : any;
     uploader: FileUploader;
     hasBaseDropZoneOver: boolean = false;
     uploadedCsvColumns: Array<string>;
@@ -137,7 +139,6 @@ export class UploadComponent implements OnInit {
             });
             localConfigObject.data.push(tempObject);
         }
-
         this.configObject = localConfigObject;
     }
 

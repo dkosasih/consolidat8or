@@ -1,35 +1,37 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             Selected CSV file:
         </div>
-        <div class="col-md-4" *ngFor="let item of uploader.queue">
+        <div class="col-md-7" *ngFor="let item of uploader.queue">
             <strong>{{ item?.file?.name }}</strong>
         </div>
-        <div class="clearfix"></div>
-        <div class="checkbox col-md-4">
+    </div>
+    <div class="row">
+        <div class="checkbox col-md-10">
             <label><input type="checkbox" value="" [(ngModel)]="isCsvHasHeader" (click)="rebindColumn()">Csv has header?</label>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader"
-                class="well my-drop-zone">
+                class="well my-drop-zone p-3">
                 Drop File Here
                 <input id="singleUploader" type="file" #fileInput ng2FileSelect [uploader]="uploader" style="display: block" />
             </div>
         </div>
     </div>
-    <div class="row col-md-9" *ngIf="configObject.data.length > 0" style="background-color: #ededed; ">
-        <div class="row">
-            <div class="col-md-12 text-center">
+    <div class="row">&nbsp;</div>
+    <div class="row col-md-9" *ngIf="configObject.data.length > 0" style="background-color: #f7f7f7;">
+        <div class="col-md-12">
+            <p class="text-center">
                 <strong>Record Preview</strong>
-            </div>
+            </p>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <generic-table #myTable [gtClasses]="'table-sm'" [gtSettings]="configObject.settings" [gtFields]="configObject.fields" [(gtData)]="configObject.data"
-                    [gtTexts]="{'tableInfo': 'Total of #recordsAfterSearch entries'}">
+                <generic-table #myTable [gtClasses]="'table-sm'" [(gtSettings)]="configObject.settings" [(gtFields)]="configObject.fields"
+                    [(gtData)]="configObject.data" [gtTexts]="{'tableInfo': 'Total of #recordsAfterSearch entries'}">
                 </generic-table>
                 <div class="text-center">
                     <small><gt-table-info class="form-text text-muted mb-2" [genericTable]="myTable"></gt-table-info></small>
@@ -40,7 +42,7 @@
     <div class="row">&nbsp;</div>
     <div class="row">&nbsp;</div>
     <div class="row" *ngIf="uploadedCsvColumns">
-        <div class=" col-md-6 columns-container">
+        <div class="col-md-6 columns-container">
             <div class="col-md-5 btn-group-vertical">
                 <div class="icon icon-warning non-draggable" *ngFor="let item of mappableColumns">
                     <span style="margin-left:3px; margin-right:5px;">{{item}}</span>
@@ -48,19 +50,21 @@
             </div>
             <div class="col-md-5 btn-group-vertical" [dragula]='"upload-result"' [dragulaModel]="uploadedCsvColumns">
                 <div class="icon icon-success" *ngFor="let item of uploadedCsvColumns">
-                    <span class="pull-right" style="cursor:pointer;" (click)="onRemoveClick(item)">x</span>
+                    <span class="float-md-right" style="cursor:pointer;" (click)="onRemoveClick(item)">x</span>
                     <span style="margin-left:3px; margin-right:5px;">{{item}}</span>
                 </div>
             </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-success" (click)="addBlank()">+</button>
+            <div class="col-md-1 btn-group-vertical at-the-bottom">
+                <div>
+                    <button type="button" class="btn btn-success" (click)="addBlank()">+</button>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">&nbsp;</div>
     <div class="row" *ngIf="uploadedCsvColumns">
         <div class="col-md-6">
-            <div class="btn btn-success pull-right" (click)="createTableBasedOnMapping()">Next ></div>
+            <div class="btn btn-success float-md-right" (click)="createTableBasedOnMapping()">Next ></div>
         </div>
     </div>
 </div>

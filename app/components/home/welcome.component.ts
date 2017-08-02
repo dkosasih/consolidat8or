@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
     templateUrl: 'app/components/home/welcome.component.html'
 })
 export class WelcomeComponent implements OnInit {
-    public pageTitle: string = '';
+    public pageTitle: string = 'Welcome';
 
     ngOnInit() {
     }

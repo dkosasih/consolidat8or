@@ -11,7 +11,7 @@ import {List} from '../../helper/collection'
 
 @Component({
     selector: 'table-render',
-    templateUrl: 'app/components/TableRender/table.render.component.html'
+    templateUrl: './table.render.component.html'
 })
 export class TableRenderComponent{
     @Input() transactions: List<any>;

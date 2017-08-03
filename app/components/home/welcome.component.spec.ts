@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixtureAutoDetect, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-
+import { } from 'jasmine';
 import { WelcomeComponent } from './welcome.component';
 
-describe('BannerComponent (templateUrl)', () => {
+describe('Welcome (templateUrl)', () => {
 
     let comp: WelcomeComponent;
     let fixture: ComponentFixture<WelcomeComponent>;
@@ -15,6 +15,9 @@ describe('BannerComponent (templateUrl)', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [WelcomeComponent], // declare the test component
+            providers: [
+                { provide: ComponentFixtureAutoDetect, useValue: true }
+            ]
         })
             .compileComponents();  // compile template and css
     }));
@@ -26,13 +29,13 @@ describe('BannerComponent (templateUrl)', () => {
         comp = fixture.componentInstance; // BannerComponent test instance
 
         // query for the title <h1> by CSS element selector
-        de = fixture.debugElement.query(By.css('h1'));
+        de = fixture.debugElement.query(By.css('div[class=panel-heading]'));
         el = de.nativeElement;
     });
 
 
-    it("should pass", function () {
-        let a = 1 + 1;
-        expect(true).toEqual(true);
+    it("should div should be the same as the page title", function () {
+
+        expect(el.textContent).toContain(comp.pageTitle);
     });
 });

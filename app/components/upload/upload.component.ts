@@ -13,9 +13,9 @@ import '../../../node_modules/angular-generic-table/@angular-generic-table/core/
 
 @Component({
     selector: 'upload-csv',
-    templateUrl: 'app/components/upload/upload.component.html',
-    styleUrls: ['app/styles/fileUpload.css',
-        'node_modules/dragula/dist/dragula.min.css'],
+    templateUrl: './upload.component.html',
+    styleUrls: ['../../styles/fileUpload.css',
+        '../../../node_modules/dragula/dist/dragula.min.css'],
     providers: [CsvReader]
 })
 export class UploadComponent implements OnInit {

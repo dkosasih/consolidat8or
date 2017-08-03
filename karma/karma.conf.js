@@ -2,6 +2,7 @@
 
 module.exports = config => {
     config.set({
+        basePath: '',
         autoWatch: true,
         browsers: ['Chrome', 'PhantomJS'],
         files: [

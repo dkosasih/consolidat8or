@@ -15,7 +15,7 @@ import { MappedColumnsService } from '../../services/mappedColumns.service';
 
 @Component({
     selector: 'preview',
-    templateUrl: 'app/components/preview/preview.component.html'
+    templateUrl: './preview.component.html'
 })
 export class PreviewComponent implements OnInit {
     constructor(

@@ -1,7 +1,8 @@
 .vscode/*
+dist/
+typings/
 node_modules/*
 app/**/*.map
 app/**/*.js
-dist/*
 **/*hot-update.js
 **/*hot-update.json

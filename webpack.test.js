@@ -1,37 +1,58 @@
 var path = require('path');
 var webpack = require('webpack');
+var helpers = require('./helpers.js');
 
 module.exports = {
     devtool: 'inline-source-map',
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.(css|html)$/,
-                loaders: ['raw-loader']
+                test: /\.ts$/,
+                loaders: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: { configFileName: helpers.root('tsconfig.json') }
+                    }, 'angular2-template-loader'
+                ]
             },
             {
-                test: /\.ts/,
-                loaders: ['awesome-typescript-loader'], include: /node_modules\\angular-generic-table/
+                test: /\.html$/,
+                loader: 'html-loader'
             },
             {
-                test: /\.ts/,
-                loaders: ['awesome-typescript-loader'], exclude: /node_modules/
+                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+                loader: 'file-loader?name=assets/[name].[hash].[ext]'
             },
-            // LESS
+            {
+                test: /\.css$/,
+                exclude: helpers.root('app'),
+                loader: 'to-string-loader!style-loader!css-loader?sourceMap'
+            }, {
+                test: /\.css$/,
+                include: helpers.root('app'),
+                loader: 'to-string-loader!raw-loader'
+            },
             {
                 test: /\.less$/,
-                loader: 'style-loader!css-loader!less-loader'
+                loader: 'to-string-loader!style-loader!css-loader!less-loader'
             },
             {
                 test: /\.scss$/,
-                use: [{
-                    loader: "style-loader"
-                }, {
-                    loader: "css-loader", options: {
+                loaders: [{
+                    loader: 'to-string-loader'
+                },
+                {
+                    loader: 'style-loader'
+                },
+                {
+                    loader: 'css-loader',
+                    options: {
                         sourceMap: true
                     }
-                }, {
-                    loader: "sass-loader", options: {
+                },
+                {
+                    loader: 'sass-loader',
+                    options: {
                         sourceMap: true
                     }
                 }]

@@ -1,5 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var helpers = require('./helpers');
 
 module.exports = {
     devtool: 'eval-source-map',
@@ -16,7 +18,14 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin()
+        new webpack.NoEmitOnErrorsPlugin(),
+        new ExtractTextPlugin('[name].css'),
+        new webpack.ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)@angular/,
+            helpers.root('./app'), // location of your src
+            {} // a map of your routes
+        )
     ],
     devServer: {
         inline: true,
@@ -25,33 +34,58 @@ module.exports = {
         port: 3000
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.ts/,
-                loaders: ['awesome-typescript-loader'], include: /node_modules\\angular-generic-table/
+                test: /\.ts$/,
+                loaders: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: { configFileName: helpers.root('tsconfig.json') }
+                    }, 'angular2-template-loader'
+                ]
             },
             {
-                test: /\.ts/,
-                loaders: ['awesome-typescript-loader'], exclude: /node_modules/
+                test: /\.html$/,
+                loader: 'html-loader'
             },
-            // LESS
+            {
+                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+                loader: 'file-loader?name=assets/[name].[hash].[ext]'
+            },
+            {
+                test: /\.css$/,
+                exclude: helpers.root('app'),
+                loader: 'to-string-loader!style-loader!css-loader?sourceMap'
+            },{
+                test: /\.css$/,
+                include: helpers.root('app'),
+                loader: 'to-string-loader!raw-loader'
+            },
             {
                 test: /\.less$/,
-                loader: 'style-loader!css-loader!less-loader'
+                loader: 'to-string-loader!style-loader!css-loader!less-loader'
             },
             {
                 test: /\.scss$/,
-                use: [{
-                    loader: "style-loader"
-                }, {
-                    loader: "css-loader", options: {
+                loaders: [{
+                    loader: 'to-string-loader'
+                },
+                {
+                    loader: 'style-loader'
+                },
+                {
+                    loader: 'css-loader',
+                    options: {
                         sourceMap: true
                     }
-                }, {
-                    loader: "sass-loader", options: {
+                },
+                {
+                    loader: 'sass-loader',
+                    options: {
                         sourceMap: true
                     }
                 }]
-            }]
+            }
+        ]
     }
 }

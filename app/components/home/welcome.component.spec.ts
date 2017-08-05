@@ -2,7 +2,7 @@ import { async, ComponentFixtureAutoDetect, ComponentFixture, TestBed } from '@a
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { } from 'jasmine';
-import { WelcomeComponent } from './welcome.component';
+import { WelcomeComponent } from 'components/home/welcome.component';
 
 describe('Welcome (templateUrl)', () => {
 

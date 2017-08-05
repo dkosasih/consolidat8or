@@ -14,7 +14,11 @@ module.exports = {
         publicPath: path.join(__dirname, 'dist')
     },
     resolve: {
-        extensions: [".ts", ".js"]
+        extensions: [".ts", ".js"],
+        modules:[
+            "./node_modules",
+            "./app"
+        ]
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/pluck';
 
-import { Transaction } from '../../DTO/transaction';
-import { IUser } from '../../DTO/user'
-import { ITransactionAccount } from '../../DTO/transactionAccount'
-import { ITag } from '../../DTO/tag'
-import { ITransactionType } from '../../DTO/transactionType'
-import { List } from '../../helper/collection'
+import { Transaction } from 'dto/transaction';
+import { IUser } from 'dto/user'
+import { ITransactionAccount } from 'dto/transactionAccount'
+import { ITag } from 'dto/tag'
+import { ITransactionType } from 'dto/transactionType'
+import { List } from 'helper/collection'
 
-import { MappedColumnsService } from '../../services/mappedColumns.service';
+import { MappedColumnsService } from 'services/mappedColumns.service';
 
 @Component({
     selector: 'preview',

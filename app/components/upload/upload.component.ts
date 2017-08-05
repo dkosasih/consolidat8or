@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { GtConfig } from 'angular-generic-table/@angular-generic-table/core';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
 import { DragulaService } from 'ng2-dragula';   
-import { CsvReader } from '../../helper/csv.reader';
-import { Transaction } from '../../DTO/transaction';
-import { MappedColumnsService } from '../../services/mappedColumns.service';
+import { CsvReader } from 'helper/csv.reader';
+import { Transaction } from 'dto/transaction';
+import { MappedColumnsService } from 'services/mappedColumns.service';
 
 import './upload.component.less'
-import '../../../node_modules/angular-generic-table/@angular-generic-table/core/generic-table.scss'
+import 'angular-generic-table/@angular-generic-table/core/generic-table.scss'
 
 @Component({
     selector: 'upload-csv',

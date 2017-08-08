@@ -12,11 +12,17 @@ import { UploadComponent } from '../components/upload/upload.component'
 import { PreviewComponent } from '../components/preview/preview.component'
 import { TableRenderComponent } from '../components/tablerender/table.render.component'
 
-import { MappedColumnsService } from '../services/mappedColumns.service'
+import { MappedColumnsService } from 'services/mappedColumns.data.service'
+import { TableSettingService } from 'services/Table.Setting.Service'
+import { CsvReader } from 'services/csv.reader.service'
+import { PreviewGuard } from 'components/preview/preview.guard'
+
+
+import 'rxjs/add/operator/pluck';
 
 const routes: Routes = [
     { path: 'upload', component: UploadComponent },
-    { path: 'tablepreview', component: PreviewComponent }
+    { path: 'tablepreview', component: PreviewComponent, canActivate: [PreviewGuard] }
 ];
 
 
@@ -28,12 +34,16 @@ const routes: Routes = [
         GenericTableModule,
         RouterModule.forChild(routes)
     ],
-
-    providers: [MappedColumnsService, DatePipe],
+    providers: [MappedColumnsService,
+        DatePipe,
+        CsvReader,
+        TableSettingService,
+        PreviewGuard
+    ],
     declarations: [
         UploadComponent,
         PreviewComponent,
-        TableRenderComponent        
+        TableRenderComponent
     ]
 
 })

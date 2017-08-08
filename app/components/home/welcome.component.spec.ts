@@ -33,9 +33,7 @@ describe('Welcome (templateUrl)', () => {
         el = de.nativeElement;
     });
 
-
     it("should div should be the same as the page title", function () {
-
         expect(el.textContent).toContain(comp.pageTitle);
     });
 });

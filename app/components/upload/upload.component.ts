@@ -3,25 +3,24 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { GtConfig } from 'angular-generic-table/@angular-generic-table/core';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
-import { DragulaService } from 'ng2-dragula';   
-import { CsvReader } from 'helper/csv.reader';
-import { Transaction } from 'dto/transaction';
-import { MappedColumnsService } from 'services/mappedColumns.service';
+import { DragulaService } from 'ng2-dragula';
 
-import './upload.component.less'
+import { TableSettingService } from 'services/Table.Setting.Service';
+import { Transaction } from 'dto/transaction';
+import { MappedColumnsService } from 'services/mappedColumns.data.service';
+
+import 'components/upload/upload.component.less'
 import 'angular-generic-table/@angular-generic-table/core/generic-table.scss'
 
 @Component({
     selector: 'upload-csv',
     templateUrl: './upload.component.html',
     styleUrls: ['../../styles/fileUpload.css',
-        '../../../node_modules/dragula/dist/dragula.min.css'],
-    providers: [CsvReader]
+        '../../../node_modules/dragula/dist/dragula.min.css']
 })
 export class UploadComponent implements OnInit {
     private transaction: Transaction = new Transaction();
 
-     @ViewChild('myTable') genericTable : any;
     uploader: FileUploader;
     hasBaseDropZoneOver: boolean = false;
     uploadedCsvColumns: Array<string>;
@@ -32,8 +31,8 @@ export class UploadComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private tableSettingService: TableSettingService,
         private dragulaService: DragulaService,
-        private csvReader: CsvReader,
         private datePipe: DatePipe,
         public mappedColumns: MappedColumnsService) {
         dragulaService.dropModel.subscribe((value: any) => {
@@ -42,58 +41,6 @@ export class UploadComponent implements OnInit {
         dragulaService.removeModel.subscribe((value: any) => {
             this.onRemoveModel(value.slice(1));
         });
-
-        // this.configObject = {
-        //     settings: [{
-        //         objectKey: 'id',
-        //         sort: 'asc',
-        //         sortOrder: 1,
-        //         columnOrder: 0
-        //     }, {
-        //         objectKey: 'name',
-        //         sort: 'asc',
-        //         sortOrder: 0,
-        //         columnOrder: 1
-        //     }, {
-        //         objectKey: 'date',
-        //         sort: 'enable',
-        //         columnOrder: 2,
-        //         visible: true
-        //     }],
-        //     fields: [{
-        //         name: 'Id',
-        //         objectKey: 'id'
-        //     }, {
-        //         name: 'Name',
-        //         objectKey: 'name'
-        //     }, {
-        //         name: 'date',
-        //         objectKey: 'date',
-        //         render: (so: any) => `${this.datePipe.transform(so.date, 'dd/MM/yyyy')}`,
-        //         stackedHeading: 'Custom heading'
-        //     }],
-        //     data: [{
-        //         'id': 1,
-        //         'name': 'Anna',
-        //         'date': new Date()
-        //     }, {
-        //         'id': 2,
-        //         'name': 'Julie',
-        //         'date': new Date()
-        //     }, {
-        //         'id': 3,
-        //         'name': 'Lillian',
-        //         'date': new Date()
-        //     }, {
-        //         'id': 4,
-        //         'name': 'Norma',
-        //         'date': new Date()
-        //     }, {
-        //         'id': 5,
-        //         'name': 'Ralph',
-        //         'date': new Date()
-        //     }]
-        // };
     }
 
     private onDropModel(args: any) {
@@ -113,40 +60,16 @@ export class UploadComponent implements OnInit {
     }
 
     private setupPreviewTableData(json: any) {
-        //reset table field
-        let localConfigObject:GtConfig<any> = { settings: [], fields: [], data: [] };
-
-        Object.keys(json[0]).reduce((prev: any, curr: any, index: number) => {
-            prev.push(curr);
-
-            // setting setup
-            localConfigObject.settings.push({ objectKey: curr, columnOrder: index, sort: 'enable' });
-
-            // fields setup
-            localConfigObject.fields.push({
-                name: curr,
-                objectKey: curr
-            });
-
-            return prev;
-        }, []);
-
-        // Data Sample
-        for (let i = 0; i < (json.length < 4 ? json.length : 3); i++) {
-            let tempObject: any = {};
-            localConfigObject.settings.forEach((item: any) => {
-                tempObject[item.objectKey] = json[i][item.objectKey];
-            });
-            localConfigObject.data.push(tempObject);
-        }
-        this.configObject = localConfigObject;
+        this.configObject = this.tableSettingService.ConstructTableSettingData(json);
+       this.configObject.data= this.configObject.data.slice(0,3);
     }
 
     private bindDataFromFile(data: File, hasHeader: boolean) {
-        this.csvReader.readCsvData(data, hasHeader, (result) => {
-            this.uploadedCsvColumns = [];
-            let jsonObject = result;
+        this.uploadedCsvColumns = [];
+        let jsonObject: any;
 
+        this.tableSettingService.ReadJsonFromFile(data, hasHeader).subscribe(result => {
+            jsonObject = result;
             this.uploadedCsvColumns = Object.keys(jsonObject[0]).reduce((prev: any, curr: any, index: number) => {
                 prev.push(curr);
                 return prev;
@@ -178,7 +101,7 @@ export class UploadComponent implements OnInit {
         }
     }
 
-    public createTableBasedOnMapping() {
+    public Next() {
         this.mappedColumns.setMappedColumns(this.uploadedCsvColumns);
         this.router.navigateByUrl('/tablepreview');
     }

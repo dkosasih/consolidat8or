@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/pluck';
 
 import { Transaction } from 'dto/transaction';
 import { IUser } from 'dto/user'
@@ -11,7 +10,7 @@ import { ITag } from 'dto/tag'
 import { ITransactionType } from 'dto/transactionType'
 import { List } from 'helper/collection'
 
-import { MappedColumnsService } from 'services/mappedColumns.service';
+import { MappedColumnsService } from 'services/mappedColumns.data.service';
 
 @Component({
     selector: 'preview',
@@ -38,6 +37,9 @@ export class PreviewComponent implements OnInit {
         return true;
     }
 
+    public Reset(){
+        
+    }
     private jsonToTransaction(transactions: any, json: any, index: number) {
         if (!this.allEmptyOrNull(json)) {
             let transaction = new Transaction();
@@ -61,16 +63,12 @@ export class PreviewComponent implements OnInit {
 
             transactions.add(transaction);
         }
-         return transactions;
+        return transactions;
     }
 
     ngOnInit() {
-        if (!this.mappedColumns.getMappedColumns() || !this.mappedColumns.getUploadedResult()) {
-            this.router.navigateByUrl("/welcome");
-        } else {
-             this.transactions = this.mappedColumns.getUploadedResult().reduce(this.jsonToTransaction.bind(this), new List<Transaction>());
-        }
+        this.transactions = this.mappedColumns.getUploadedResult().reduce(this.jsonToTransaction.bind(this), new List<Transaction>());
 
-         //Observable.from<Array<Transaction>>(this.transactions.items()).pluck('TransactionDate').subscribe(bla=>{console.log(bla);});
+        Observable.from<Array<Transaction>>(this.transactions.items()).pluck('TransactionDate').subscribe(bla => { console.log(bla); });
     }
 }

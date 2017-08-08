@@ -7,7 +7,6 @@ export class CsvReader {
         reader.onload = () => {
             let jsonObject = this.csvJSON(reader.result, includeHeader);
             callback(jsonObject);
-
         };
         reader.readAsText(data);
     }
